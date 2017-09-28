@@ -18,6 +18,7 @@
   "homepage": "https://github.com/kerwin0104/shaman#readme",
   "dependencies": {
     "express": "^4.15.5",
+    "express-handlebars": "^3.0.0",
     "glob": "^7.1.2"
   }
 }
