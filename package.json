@@ -1,21 +1,21 @@
 {
-  "name": "shaman",
+  "name": "tiresias",
   "version": "0.0.1",
-  "description": "",
+  "description": "Shaman use autorouter for proejct. Router will auto find controller in controllers folder. You also use variables in path, if you want get variables of path, just use underscore (_) as first character of the controller folder.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kerwin0104/shaman.git"
+    "url": "git+https://github.com/kerwin0104/tiresias.git"
   },
   "author": "kerwinzhang@foxmail.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kerwin0104/shaman/issues"
+    "url": "https://github.com/kerwin0104/tiresias/issues"
   },
-  "homepage": "https://github.com/kerwin0104/shaman#readme",
+  "homepage": "https://github.com/kerwin0104/tiresias#readme",
   "dependencies": {
     "express": "^4.15.5",
     "express-handlebars": "^3.0.0",
