@@ -42,9 +42,11 @@ module.exports = controller
 ```
 
 
-# run
+## run
+```
 npm install
 node index.js
+```
 
 ## test hbs template
 http://127.0.0.1:8080/user/12/index?bb=2
