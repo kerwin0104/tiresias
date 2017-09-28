@@ -3,7 +3,7 @@ var controller = {
     res.render('test', {
       title: 'test template',
       content: 'this is a hbs template',
-      params: req.shaman.params
+      params: req.tiresias.params
     })
   }
 }

@@ -92,7 +92,7 @@ class RouterDisponser {
             }
           }
           this._parseParams()
-          req.shaman = {
+          req.tiresias = {
             router: this,
             params: this.params
           }

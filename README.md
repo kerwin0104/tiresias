@@ -1,4 +1,4 @@
-# shaman
+# tiresias
 Shaman use autorouter for proejct.
 Router will auto find controller in controllers folder.
 You also use variables in path, if you want get variables of path, just use underscore (_) as first character of the controller folder.
@@ -19,12 +19,12 @@ or
 http://yourdomain/user/2323/index
 ```
 
- you can get variables from req.shaman.params like:
+ you can get variables from req.tiresias.params like:
 
 ```javascript
 // this controller will disponse all http method
 function controller (req, res, next) {
-    res.send(req.shaman.params.id)
+    res.send(req.tiresias.params.id)
 }
 module.exports = controller
 ```
@@ -32,10 +32,10 @@ or
 ```javascript
 var controller = {
   get (req, res, next) { // just disponse http method 'get'
-    res.send(req.shaman.params.id)
+    res.send(req.tiresias.params.id)
   },
   post (req, res, next) { // just disponse http method 'post'
-    res.send(req.shaman.params.id)
+    res.send(req.tiresias.params.id)
   }
 }
 module.exports = controller
@@ -57,7 +57,7 @@ http://127.0.0.1:8080/abc
 
 ## dist
 ```
-|- kernel        // kernel of shaman
+|- kernel        // kernel of tiresias
 |- controllers
     |- _type
          |- index.js
