@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/kerwin0104/shaman#readme",
   "dependencies": {
-    "express": "^4.15.5"
+    "express": "^4.15.5",
+    "glob": "^7.1.2"
   }
 }
