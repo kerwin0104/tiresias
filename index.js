@@ -7,8 +7,9 @@ var app = express()
 app.use(express.static(path.join(config.rootDir, 'static')))
 app.use(kernel.routeHelper(config))
 
-app.engine('.hbs', exphbs({extname: '.hbs'}));
-app.set('view engine', '.hbs');
+app.engine('.hbs', exphbs({extname: '.hbs'}))
+app.set('view engine', '.hbs')
+app.enable('view cache')
 
 var port = 3000
 console.log('server listen at port:' + port)

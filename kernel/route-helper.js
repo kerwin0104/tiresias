@@ -2,6 +2,8 @@ var path = require('path')
 var fs = require('fs')
 var glob = require("glob")
 
+var globPathCache = {}
+
 class RouterDisponser {
   constructor (config) {
     this.params = {}
@@ -23,25 +25,31 @@ class RouterDisponser {
     globPathArr.push('index.*')
 
     var globPath = path.join(this[`${type}DirPath`], globPathArr.join('/'))
-  
-    glob(globPath, (err, filePaths) => {
-      if (err) {
-        callback(err)
-      } else {
-        for (let filePath of filePaths) {
-          var newFilePath = this._fixGlobPath(filePath)
-          var filePathArr = newFilePath.split('/')
-          var isPathMath = this._isPathMatch(reqPathArr, filePathArr)
-          if (isPathMath) {
-            this.reqPathArr = reqPathArr
-            this.filePathArr = filePathArr
-            callback(null, filePath)
-            return
+    
+    if (globPathCache[globPath]) {
+      callback(null, globPathCache[globPath])
+    } else {
+      glob(globPath, (err, filePaths) => {
+        if (err) {
+          callback(err)
+        } else {
+          for (let filePath of filePaths) {
+            var newFilePath = this._fixGlobPath(filePath)
+            var filePathArr = newFilePath.split('/')
+            var isPathMath = this._isPathMatch(reqPathArr, filePathArr)
+            if (isPathMath) {
+              this.reqPathArr = reqPathArr
+              this.filePathArr = filePathArr
+              globPathCache[globPath] = filePath
+              callback(null, filePath)
+              return
+            }
           }
+          callback('file not found')
         }
-        callback('file not found')
-      }
-    }) 
+      }) 
+    }
+  
   }
 
   _isPathMatch (reqPathArr, filePathArr) {
