@@ -1,12 +1,11 @@
 var path = require('path')
 var fs = require('fs')
 var glob = require("glob")
-
 var globPathCache = {}
 
 class RouterDisponser {
   constructor (config) {
-    this.params = {}
+    // this.params = {}
     this.filePathArr = []
     this.reqPathArr = []
 
@@ -17,6 +16,7 @@ class RouterDisponser {
 
   _findFilePathByType (type, reqPath, callback) {
     var reqPathArr = reqPath.split('/')
+    this.reqPathArr = reqPathArr
   
     var globPathArr = reqPathArr.map(function (item, index) {
       return index === 0 ? '.' : '*'
@@ -26,21 +26,25 @@ class RouterDisponser {
 
     var globPath = path.join(this[`${type}DirPath`], globPathArr.join('/'))
     
-    if (globPathCache[globPath]) {
-      callback(null, globPathCache[globPath])
+    var cacheFilePath = globPathCache[globPath]
+    if (cacheFilePath) {
+      this.filePathArr = cacheFilePath.relativeFilePath.split('/')
+      callback(null, cacheFilePath.filePath)
     } else {
       glob(globPath, (err, filePaths) => {
         if (err) {
           callback(err)
         } else {
           for (let filePath of filePaths) {
-            var newFilePath = this._fixGlobPath(filePath)
-            var filePathArr = newFilePath.split('/')
+            var relativeFilePath = `/${path.relative(this.controllerDirPath, filePath)}`
+            var filePathArr = relativeFilePath.split('/')
             var isPathMath = this._isPathMatch(reqPathArr, filePathArr)
             if (isPathMath) {
-              this.reqPathArr = reqPathArr
               this.filePathArr = filePathArr
-              globPathCache[globPath] = filePath
+              globPathCache[globPath] = {
+                filePath,
+                relativeFilePath
+              }
               callback(null, filePath)
               return
             }
@@ -68,7 +72,7 @@ class RouterDisponser {
   }
 
   _parseParams () {
-    var params = this.params
+    var params = this.params = {}
     this.filePathArr.forEach((filePath, index) => {
       if (filePath.indexOf('_') === 0) {
         var key = filePath.substr(1)
