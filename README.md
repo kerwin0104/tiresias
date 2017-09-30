@@ -1,5 +1,5 @@
 # tiresias
-Shaman use autorouter for proejct.
+tiresias use autorouter for proejct.
 Router will auto find controller in controllers folder.
 You also use variables in path, if you want get variables of path, just use underscore (_) as first character of the controller folder.
 
