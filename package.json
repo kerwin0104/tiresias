@@ -1,7 +1,7 @@
 {
   "name": "tiresias",
-  "version": "0.0.1",
-  "description": "Shaman use autorouter for proejct. Router will auto find controller in controllers folder. You also use variables in path, if you want get variables of path, just use underscore (_) as first character of the controller folder.",
+  "version": "0.0.2",
+  "description": "tiresias use autorouter for proejct. Router will auto find controller in controllers folder. You also use variables in path, if you want get variables of path, just use underscore (_) as first character of the controller folder.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
