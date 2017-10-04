@@ -65,7 +65,7 @@ module.exports = controller
 ## run
 ```
 npm install
-node index.js
+node test/app.js
 ```
 
 ## test hbs template

@@ -5,25 +5,53 @@ var kernel = require('./kernel')
 var path = require('path')
 var app = express()
 
-// set static dir
-app.use('/' + config.staticDirName, express.static(path.join(config.rootDir, config.staticDirName)))
+var tiresisa = {
+  setConfig (obj) {
+    if (typeof obj === 'object') {
+      config = Object.assign({}, config, obj)
+    } else {
+      throw new Error('Arguments must be an object.')
+    }
+    console.log(config)
+  },
 
-// set resource dir
-app.use('/' + config.resourceDirName, express.static(path.join(config.rootDir, config.resourceDirName)))
+  useRouter () {
+    // use router
+    app.use(kernel.routeHelper(config))
+  },
 
-// set html dir
-app.use(express.static(path.join(config.rootDir, config.htmlDirName)))
+  useStatic () {
+    // set static dir
+    app.use('/' + config.staticDirName, express.static(path.join(config.rootDir, config.staticDirName)))
+    
+    // set resource dir
+    app.use('/' + config.resourceDirName, express.static(path.join(config.rootDir, config.resourceDirName)))
+    
+    // set html dir
+    app.use(express.static(path.join(config.rootDir, config.htmlDirName)))
+  },
 
-// use hbs template
-app.engine('.hbs', exphbs({extname: '.hbs'}))
-app.set('view engine', '.hbs')
-app.enable('view cache')
+  useHandlebars () {
+    // use hbs template
+    app.engine('.hbs', exphbs({extname: '.hbs'}))
+    app.set('view engine', '.hbs')
+    app.enable('view cache')
+  },
 
-// use router
-app.use(kernel.routeHelper(config))
+  getExpressInstance () {
+    return app
+  },
 
-var port = 3000
-console.log('server listen at port:' + port)
-app.listen(port)
+  simpleStart (port = 3000) {
+    this.useStatic()
+    this.useRouter()
+    this.useHandlebars()
+    console.log(`tiresias listen at port : ${port}`)
+    app.listen(port)
+    return app
+  }
+}
+
+module.exports = tiresisa
 
 
