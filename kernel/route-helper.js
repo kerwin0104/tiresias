@@ -8,13 +8,10 @@ class RouterDisponser {
     // this.params = {}
     this.filePathArr = []
     this.reqPathArr = []
-
-    this.controllerDirPath = path.join(config.rootDir, `./${config.controllerDirName}`)
-    this.viewDirPath = path.join(config.rootDir, `./${config.viewDirName}`)
-    this.modelDirPath = path.join(config.rootDir, `./${config.modelDirName}`)
+    this.config = config
   }
 
-  _findFilePathByType (type, reqPath, callback) {
+  _findFilePathInDirctory (baseDirPath, reqPath, callback) {
     var reqPathArr = reqPath.split('/')
     this.reqPathArr = reqPathArr
   
@@ -24,7 +21,7 @@ class RouterDisponser {
 
     globPathArr.push('index.*')
 
-    var globPath = path.join(this[`${type}DirPath`], globPathArr.join('/'))
+    var globPath = path.join(baseDirPath, globPathArr.join('/'))
     
     var cacheFilePath = globPathCache[globPath]
     if (cacheFilePath) {
@@ -36,7 +33,7 @@ class RouterDisponser {
           callback(err)
         } else {
           for (let filePath of filePaths) {
-            var relativeFilePath = `/${path.relative(this.controllerDirPath, filePath)}`
+            var relativeFilePath = `/${path.relative(baseDirPath, filePath)}`
             var filePathArr = relativeFilePath.split('/')
             var isPathMath = this._isPathMatch(reqPathArr, filePathArr)
             if (isPathMath) {
@@ -89,8 +86,10 @@ class RouterDisponser {
   }
 
   getDisponser () {
+    var config = this.config
     return (req, res, next) => {
-      this._findFilePathByType('controller', req.path, (err, filePath) => {
+      var controllerDirPath = path.join(config.rootDir, config.controllerDirName)
+      this._findFilePathInDirctory(controllerDirPath, req.path, (err, filePath) => {
         if (err) {
           next()
         } else {
@@ -103,16 +102,33 @@ class RouterDisponser {
               return next()
             }
           }
-          this._parseParams()
-          req.tiresias = {
-            router: this,
-            params: this.params
-          }
+          this._addParams(req)
+          this._addTemplateMethod(req)
           controller(req, res, next)
         }
       })
     }   
   }
+
+  _addParams (req) {
+    this._parseParams()
+    req.tiresias = {
+      router: this,
+      params: this.params
+    }
+  }
+
+  _addTemplateMethod (req) {
+    var config = this.config
+    var that = this
+    req.getTemplatePath = function (callback) {
+      var templateDirPath = path.join(config.rootDir, config.templateDirName)
+      that._findFilePathInDirctory(templateDirPath, req.path, (err, filePath) => {
+        callback(err, filePath)
+      })
+    }
+  }
+
 }
 
 function routeHelper (config) {
