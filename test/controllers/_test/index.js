@@ -1,9 +1,9 @@
 var controller = {
   get (req, res, next) {
     req.getTemplatePath((err, path) => {
-      // console.log('path')
-      // console.log(path)
-      res.render(path)
+      res.render(path, {
+        params: req.tiresias.params
+      })
     })
   }
 }

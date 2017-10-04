@@ -121,6 +121,7 @@ class RouterDisponser {
   _addTemplateMethod (req) {
     var config = this.config
     var that = this
+    console.log(req.tiresias.params)
     req.getTemplatePath = function (callback) {
       var templateDirPath = path.join(config.rootDir, config.templateDirName)
       that._findFilePathInDirctory(templateDirPath, req.path, (err, filePath) => {

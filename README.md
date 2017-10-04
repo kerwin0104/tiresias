@@ -6,17 +6,17 @@ You also use variables in path, if you want get variables of path, just use unde
 # use
 controller folder path
 ```
-/controllers/user/_id/index/index.js
+test/controllers/_test/index.js
 ```
 
 you can access this controller by path:
 ```
-http://yourdomain/user/132323/index  
+http://127.0.0.1:3000/testanything
 ```
 
 or
 ```
-http://yourdomain/user/2323/index
+http://127.0.0.1:3000/othertest
 ```
 
  you can get variables from req.tiresias.params like:
@@ -41,6 +41,26 @@ var controller = {
 module.exports = controller
 ```
 
+you can use hbs template
+
+create a hbs template file at test/templates/_test/index.hbs
+
+use template in test/controllers/_test/index.js like this:
+
+``` javascript
+var controller = { 
+  get (req, res, next) {
+    req.getTemplatePath((err, path) => {
+      res.render(path, {
+        params: req.tiresias.params
+      })  
+    })  
+  }
+}
+
+module.exports = controller
+```
+
 
 ## run
 ```
@@ -49,24 +69,32 @@ node index.js
 ```
 
 ## test hbs template
-http://127.0.0.1:8080/user/12/index?bb=2
+http://127.0.0.1:3000/testanything
 
 ## test common route
-http://127.0.0.1:8080/abc
+http://127.0.0.1:3000/test/action
 
 
 ## dist
 ```
 |- kernel        // kernel of tiresias
-|- controllers
-    |- _type
-         |- index.js
-    |- user
-         |- _id
-             |- index
+|- test
+    |- controllers     // controller files 
+          |- _test
+              |- index.js
+          |- test
+              |- action
                   |- index.js
-|- models   // model files
-|- views   // view files
+    |- htmls           // html files
+        |- testhtml
+            |- index.html
+        |- page1.html
+        |- page2.html
+    |- resources       // resource files
+    |- static          // static files
+    |- templates       // template files 
+        |- _test
+            |- index.hbs  
 |- config.js // config of projects
 |- index.js
 ```
