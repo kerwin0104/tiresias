@@ -24,7 +24,7 @@ http://127.0.0.1:3000/othertest
 ```javascript
 // this controller will disponse all http method
 function controller (req, res, next) {
-    res.send(req.tiresias.params、test.)
+    res.send(req.tiresias.params.test)
 }
 module.exports = controller
 ```
