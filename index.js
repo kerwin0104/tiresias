@@ -12,7 +12,6 @@ var tiresisa = {
     } else {
       throw new Error('Arguments must be an object.')
     }
-    console.log(config)
   },
 
   useRouter () {
