@@ -5,7 +5,7 @@ var config = {
   'controllerDirName': 'controllers',
   'htmlDirName': 'htmls',
   'resourceDirName': 'resources',
-  'staticDirName': 'views',
+  'staticDirName': 'static',
   'templateDirName': 'templates'
 }
 module.exports = config
