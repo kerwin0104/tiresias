@@ -6,6 +6,8 @@ var path = require('path')
 var app = express()
 
 var tiresisa = {
+  app,
+
   setConfig (obj) {
     if (typeof obj === 'object') {
       config = Object.assign({}, config, obj)
@@ -34,7 +36,7 @@ var tiresisa = {
     // use hbs template
     app.engine('.hbs', exphbs({extname: '.hbs'}))
     app.set('view engine', '.hbs')
-    app.enable('view cache')
+    // app.enable('view cache')
   },
 
   getExpressInstance () {
