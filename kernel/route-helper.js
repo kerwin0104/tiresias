@@ -3,6 +3,20 @@ var fs = require('fs')
 var glob = require("glob")
 var globPathCache = {}
 
+function cacheGlob (globPath, callback) {
+  var cache = globPathCache[globPath]
+  if (cache) {
+    callback(null, cache)
+  } else {
+    glob(globPath, (err, filePaths) => {
+      if (!err) {
+        globPathCache[globPath] = filePaths
+      }
+      callback(err, filePaths)
+    })
+  }
+}
+
 class RouterDisponser {
   constructor (config) {
     // this.params = {}
@@ -23,33 +37,24 @@ class RouterDisponser {
 
     var globPath = path.join(baseDirPath, globPathArr.join('/'))
     
-    var cacheFilePath = globPathCache[globPath]
-    if (cacheFilePath) {
-      this.filePathArr = cacheFilePath.relativeFilePath.split('/')
-      callback(null, cacheFilePath.filePath)
-    } else {
-      glob(globPath, (err, filePaths) => {
-        if (err) {
-          callback(err)
-        } else {
-          for (let filePath of filePaths) {
-            var relativeFilePath = `/${path.relative(baseDirPath, filePath)}`
-            var filePathArr = relativeFilePath.split('/')
-            var isPathMath = this._isPathMatch(reqPathArr, filePathArr)
-            if (isPathMath) {
-              this.filePathArr = filePathArr
-              globPathCache[globPath] = {
-                filePath,
-                relativeFilePath
-              }
-              callback(null, filePath)
-              return
-            }
+    var time = +new Date
+    cacheGlob(globPath, (err, filePaths) => {
+      if (err) {
+        callback(err)
+      } else {
+        for (let filePath of filePaths) {
+          var relativeFilePath = `/${path.relative(baseDirPath, filePath)}`
+          var filePathArr = relativeFilePath.split('/')
+          var isPathMath = this._isPathMatch(reqPathArr, filePathArr)
+          if (isPathMath) {
+            this.filePathArr = filePathArr
+            callback(null, filePath)
+            return
           }
-          callback('file not found')
         }
-      }) 
-    }
+        callback('file not found')
+      }
+    }) 
   
   }
 
@@ -121,7 +126,6 @@ class RouterDisponser {
   _addTemplateMethod (req) {
     var config = this.config
     var that = this
-    console.log(req.tiresias.params)
     req.getTemplatePath = function (callback) {
       var templateDirPath = path.join(config.rootDir, config.templateDirName)
       that._findFilePathInDirctory(templateDirPath, req.path, (err, filePath) => {
