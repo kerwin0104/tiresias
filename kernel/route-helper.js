@@ -27,6 +27,9 @@ class RouterDisponser {
 
   _findFilePathInDirctory (baseDirPath, reqPath, callback) {
     var reqPathArr = reqPath.split('/')
+    if (reqPath === '/') {
+      reqPathArr = []
+    }
     this.reqPathArr = reqPathArr
   
     var globPathArr = reqPathArr.map(function (item, index) {
@@ -98,6 +101,9 @@ class RouterDisponser {
         if (err) {
           next()
         } else {
+          if (config.debug = true) {
+            delete require.cache[filePath]
+          }
           var controller = require(filePath)
           if (typeof controller !== 'function') {
             var method = req.method.toLowerCase()
