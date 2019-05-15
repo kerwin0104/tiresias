@@ -1,6 +1,6 @@
 {
   "name": "tiresias",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "tiresias use autorouter for proejct. Router will auto find controller in controllers folder. You also use variables in path, if you want get variables of path, just use underscore (_) as first character of the controller folder.",
   "main": "index.js",
   "scripts": {
@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/kerwin0104/tiresias#readme",
   "dependencies": {
-    "express": "^4.15.5",
-    "express-handlebars": "^3.0.0",
-    "glob": "^7.1.2"
+    "express": "4.15.5",
+    "express-handlebars": "3.0.0",
+    "glob": "7.1.2"
   }
 }
